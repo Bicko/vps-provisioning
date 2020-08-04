@@ -1,0 +1,116 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  
+  tasks:
+    - name: Create group mandj
+      group:
+        name: mandj
+        gid: 1002
+        state: present
+
+    - name: Create a user account for Mike
+      user:
+        name: mike
+        uid: 1969
+        group: mandj
+        password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
+        groups: adm, dialout, cdrom, sudo, audio, video, plugdev, games, users, input, netdev
+        append: yes
+        state: present
+        shell: /bin/bash
+        system: no
+        create_home: yes
+
+    - name: Set Mike's authorized_key for X200
+      authorized_key:
+        user: mike
+        state: present
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMmKwyb5Wg4lCZMulRAclBOJS6Ukxmv0MTmRIAR/OLIi mike@X200'
+      
+    - name: Set Mike's authorized_key for PineBookPro
+      authorized_key:
+        user: mike
+        state: present
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILislSjlQPHgPlLimVZECJ/hTIVT81pIUPoBStOx8qjY rock@Debian-Desktop'
+      
+    - name: Set Mike's authorized_key for server
+      authorized_key:
+        user: mike
+        state: present
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK7tew3lbJkHS5LCC1Ad/sdfz1mWQXxCAbiYULZhazJ9 mike@apple'
+
+    - name: Set hostname
+      hostname:
+        name: linode
+    - name: Ensure hosts file has correct hostname too
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.1\.1'
+        line: 127.0.1.1       linode
+     
+    - name: "Change SSH port number"
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^Port"
+        line: "Port 7056"
+      notify: Restart ssh
+      
+    - name: Disallow password authentication
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+      notify: Restart ssh
+
+    - name: Disallow root SSH access
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        state: present
+      notify: Restart ssh
+  
+    - name: Set timezone
+      timezone:
+        name: Europe/London
+        
+    - name: Set GB locale
+      locale_gen:
+        name: en_GB.UTF-8
+        state: present
+
+    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds (1 hr) ago
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        
+    - name: Install packages
+      apt:
+        pkg:
+        - python3
+        - python3-pip
+        - tmux
+        - vim
+        - mariadb-server
+        - mariadb-client
+        - python3-mysqldb
+        - nmap
+        - arp-scan
+        - mtr
+        - whois
+        - mc
+        - htop
+        - ncdu
+        - mutt
+        - magic-wormhole
+        - wavemon
+        - cmake
+
+  handlers:
+    - name: Restart ssh
+      service:
+        name: ssh
+        state: restarted
