@@ -108,6 +108,7 @@
         - magic-wormhole
         - wavemon
         - cmake
+        - sshguard
   
     - name: Install Docker
       apt:
