@@ -94,11 +94,7 @@
         - python3-pip
         - tmux
         - vim
-        - mariadb-server
-        - mariadb-client
-        - python3-mysqldb
         - nmap
-        - arp-scan
         - mtr
         - whois
         - mc
@@ -106,8 +102,6 @@
         - ncdu
         - mutt
         - magic-wormhole
-        - wavemon
-        - cmake
         - sshguard
   
     - name: Install Docker
