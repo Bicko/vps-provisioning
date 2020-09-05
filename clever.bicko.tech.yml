@@ -1,0 +1,12 @@
+version: '3'
+services:
+  web:
+    container_name: Apache with PHP
+    image: php:apache
+    ports:
+      - "14080:80"
+      - "14443:443"
+    restart: unless-stopped
+    volumes:
+      - /srv/www/docker/clever.bicko.tech/html/:/var/www/html/
+      - /srv/www/docker/clever.bicko.tech/logs/:/var/log/apache2/
