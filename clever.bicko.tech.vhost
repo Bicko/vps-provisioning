@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+    ServerName clever.bicko.tech
+    ServerAdmin webmaster@clever.bicko.tech
+    CustomLog /var/www/log/clever.bicko.tech/custom.log combined
+    ErrorLog /var/www/log/clever.bicko.tech/errors.log
+    ProxyPreserveHost On
+    ProxyPass        "/" "http://127.0.0.1:14080/"
+    ProxyPassReverse "/" "http://127.0.0.1:14080/"
+</VirtualHost>
