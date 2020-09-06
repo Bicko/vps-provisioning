@@ -40,7 +40,7 @@
         
     - name: Enable proxy_http module
       apache2_module:
-        state: absent
+        state: present
         name: proxy_http
         
     - name: Enable proxy_balancer module
