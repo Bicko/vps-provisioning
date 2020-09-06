@@ -55,7 +55,7 @@
         
     - name: Enable rewrite module
       apache2_module:
-        state: present
+        state: absent
         name: rewrite
 
 #    - name: Enable rewrite module
