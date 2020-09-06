@@ -24,4 +24,4 @@ test ! -d vps-provisioning && git clone https://github.com/Bicko/vps-provisionin
 #Get latest yaml, etc
 cd vps-provisioning && git pull
 
-ansible-playbook ~/vps-provisioning/do-docker.yml
+ansible-playbook ~/vps-provisioning/do-01-docker.yml
