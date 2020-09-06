@@ -43,24 +43,20 @@
         state: present
         name: proxy_http
         
-    - name: Enable proxy_balancer module
+    - name: proxy_balancer module not required
       apache2_module:
         state: absent
         name: proxy_balancer
         
-    - name: Enable lbmethod_byrequests module
+    - name: lbmethod_byrequests module not required
       apache2_module:
         state: absent
         name: lbmethod_byrequests
         
-    - name: Enable rewrite module
+    - name: rewrite module not required
       apache2_module:
         state: absent
         name: rewrite
-
-#    - name: Enable rewrite module
-#      shell: /usr/sbin/a2enmod rewrite
-#      notify: Reload Apache
 
     - name: Enable new site
       shell: /usr/sbin/a2ensite clever.bicko.tech.conf
