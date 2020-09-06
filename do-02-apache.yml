@@ -73,8 +73,8 @@
         owner: mike
         group: mandj
 
-handlers:
-  - name: Reload Apache
-    service:
-      name: apache2
-      state: reloaded
+  handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
