@@ -50,7 +50,7 @@
         
     - name: Enable lbmethod_byrequests module
       apache2_module:
-        state: present
+        state: absent
         name: lbmethod_byrequests
         
     - name: Enable rewrite module
