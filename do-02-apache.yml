@@ -72,8 +72,9 @@
         mode: '0644'
         owner: mike
         group: mandj
-        
-    - name: Reload Apache
-      service:
-        name: apache2
-        state: reloaded
+
+handlers:
+  - name: Reload Apache
+    service:
+      name: apache2
+      state: reloaded
