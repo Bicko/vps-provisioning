@@ -45,7 +45,7 @@
         
     - name: Enable proxy_balancer module
       apache2_module:
-        state: present
+        state: absent
         name: proxy_balancer
         
     - name: Enable lbmethod_byrequests module
