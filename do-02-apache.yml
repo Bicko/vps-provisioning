@@ -38,10 +38,10 @@
         state: present
         name: proxy
         
-    - name: Enable proxy_httpd module
+    - name: Enable proxy_http module
       apache2_module:
         state: present
-        name: proxy_httpd
+        name: proxy_http
         
     - name: Enable proxy_balancer module
       apache2_module:
