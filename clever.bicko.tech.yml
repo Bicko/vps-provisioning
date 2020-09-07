@@ -8,5 +8,5 @@ services:
       - "14443:443"
     restart: unless-stopped
     volumes:
-      - /srv/www/docker/clever.bicko.tech/html/:/var/www/html/
-      - /srv/www/docker/clever.bicko.tech/logs/:/var/log/apache2/
+      - /var/www/docker/clever.bicko.tech/html/:/var/www/html/
+      - /var/www/docker/clever.bicko.tech/logs/:/var/log/apache2/
