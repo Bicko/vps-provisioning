@@ -1,0 +1,96 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  
+  tasks:
+    - name: Install packages
+      apt:
+        pkg:
+        - apache2
+        
+#    - name: Set Apache default index.html
+#      get_url:
+#        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.html
+#        dest: /var/www/html/index.html
+#        mode: '0644'
+#        owner: mike
+#        group: mandj
+
+    - name: Create Apache logs subdirectory
+      file:
+        path: /var/www/logs/clever.bicko.tech
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+
+    - name: Set Apache virtual host file for clever.bicko.tech
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.vhost
+        dest: /etc/apache2/sites-available/clever.bicko.tech.conf
+        mode: '0644'
+        owner: root
+        group: root
+
+    - name: Enable proxy module
+      apache2_module:
+        state: present
+        name: proxy
+        
+    - name: Enable proxy_http module
+      apache2_module:
+        state: present
+        name: proxy_http
+        
+    - name: proxy_balancer module not required
+      apache2_module:
+        state: absent
+        name: proxy_balancer
+        
+    - name: lbmethod_byrequests module not required
+      apache2_module:
+        state: absent
+        name: lbmethod_byrequests
+        
+    - name: rewrite module not required
+      apache2_module:
+        state: absent
+        name: rewrite
+
+    - name: Enable new site
+      shell: /usr/sbin/a2ensite clever.bicko.tech.conf
+      notify: Reload Apache
+        
+    - name: Create directories for clever.bicko.tech
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+        owner: mike
+        group: mandj
+      loop:
+        - /var/www/docker/clever.bicko.tech/html
+        - /var/www/docker/clever.bicko.tech/logs
+        
+    - name: Get index.php for clever.bicko.tech
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.php
+        dest: /var/www/docker/clever.bicko.tech/html/index.php
+        mode: '0644'
+        owner: mike
+        group: mandj
+        
+    - name: Get docker-compose.yml for clever.bicko.tech
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.yml
+        dest: /var/www/docker/clever.bicko.tech/docker-compose.yml
+        mode: '0644'
+        owner: mike
+        group: mandj
+
+  handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
